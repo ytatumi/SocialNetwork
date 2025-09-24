@@ -1,0 +1,34 @@
+Classes:
+
+User abstract class
+ + name, email, abstract postMessage() (blockUser())
+AdminUser implements Administration, Moderation
+ModUser implements Moderation
+RegularUser implements Reportable
+
+Post implements Reportable, Likable
+ + user, msg, timestamp, likers
+PostBoard implements Reportable
+ + subject, posts 
+ReportedPost extends Post
+ + post, reporters, status, moderator
+ReportedUser extends User
+ + reporters, status, moderator
+ReportedBoard extends PostBoard
+ + reporters, status, moderator
+
+
+Network
+ + reportPosts, reportUser, reportedBoards
+
+
+Interfaces:
+
+Likeable interface
+ + like(), unlike()
+Reportable inteface
+ + report(),
+Moderation inteface
+ + viewReportInbox(), deleteMessage()
+Administration interface
+ + deleteUser(), banUser()
