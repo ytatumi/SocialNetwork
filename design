@@ -7,7 +7,8 @@ ModUser implements Moderation
 RegularUser implements Reportable
 
 Post implements Reportable, Likable
- + user, msg, timestamp, likers
+ + user, msg, timestamp, likers, reported, moderated, accepted
+
 PostBoard implements Reportable
  + subject, posts 
 ReportedPost extends Post
