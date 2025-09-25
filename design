@@ -1,35 +1,33 @@
 Classes:
 
 User abstract class
- + name, email, abstract postMessage() (blockUser())
+ + name, email, abstract, createPost(), reportPost(), [blockUser(), reportUser()]
 AdminUser implements Administration, Moderation
 ModUser implements Moderation
 RegularUser implements Reportable
 
 Post implements Reportable, Likable
- + user, msg, timestamp, likers, reported, moderated, accepted
+ + user, msg, timestamp, likers, reported [reportList (reported, moderated)]
 
-PostBoard implements Reportable
- + subject, posts 
-ReportedPost extends Post
- + post, reporters, status, moderator
-ReportedUser extends User
- + reporters, status, moderator
-ReportedBoard extends PostBoard
- + reporters, status, moderator
+    PostBoard implements Reportable
+     + subject, posts
+    ReportedPost extends Post
+     + post, reporters, status, moderator
+    ReportedUser extends User
+     + reporters, status, moderator
+    ReportedBoard extends PostBoard
+     + reporters, status, moderator
 
-
-Network
- + reportPosts, reportUser, reportedBoards
-
+SocialNetwork
+ + listOfPosts, CLI: showPosts(), show some CLI options depending on userClass
 
 Interfaces:
 
 Likeable interface
  + like(), unlike()
-Reportable inteface
- + report(),
-Moderation inteface
- + viewReportInbox(), deleteMessage()
+Reportable interface
+ + report()
+Moderation interface
+ + showReportedPosts(), acceptPost(), deletePost()
 Administration interface
  + deleteUser(), banUser()
