@@ -1,3 +1,11 @@
+# IntelliJ
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.idea
+*.iml
+*.xml
+
 # Compiled class file
 *.class
 
