@@ -51,6 +51,10 @@ public class Post implements Likeable, Reportable {
     }
 
     public ArrayList<User> getLikes(){ return this.likers; }
+    public User getUser(){ return this.user; }
+    public String getMsg(){ return this.msg; }
+    public boolean getReported(){ return this.reported; }
+    public void setReported(){ this.reported = !this.reported; }
 
     // [reportList (reported, moderated)]
 
