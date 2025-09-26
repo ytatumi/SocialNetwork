@@ -1,3 +1,7 @@
+package toxic.user;
+
+import toxic.Post;
+
 public abstract class User {
  String name;
  String email;
@@ -7,8 +11,14 @@ public abstract class User {
         this.email = email;
     }
     public Post createPost(String msg) {
+        return null;
     }
     public Post reportPost(Post post) {
+        return null;
     }
 
- }
+    public String getName() {
+        return name;
+    }
+
+}

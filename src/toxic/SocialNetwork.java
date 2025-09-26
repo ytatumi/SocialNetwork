@@ -1,24 +1,39 @@
 package toxic;
-
+import toxic.user.RegularUser;
+import toxic.user.User;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class SocialNetwork {
-    ArrayList<Post> listOfPosts;
+    List<Post> listOfPosts;
+    List<User> listOfUsers;
+
+
 
     public SocialNetwork() {
         this.listOfPosts = new ArrayList<>();
+        this.listOfUsers = new ArrayList<User>();
+        init();
+    }
+
+    public void init(){
+        User regularUser1 = new RegularUser("Test User",  "test.google.com");
+        listOfUsers.add(regularUser1);
+        Post testPost = new Post(regularUser1, "test message");
+        listOfPosts.add(testPost);
     }
 
     public void run() {
         Scanner scn = new Scanner(System.in);
-        selectMenu(scn, user);
+        selectMenu(scn, listOfUsers.get(0));
     }
 
     public void selectMenu(Scanner scn, User user) {
         int selected = -1;
         while (selected != 99) {
-            if (user instanceof RegularUser) {
+            if (user instanceof User) {
+            //if (user instanceof RegularUser) {
                 displayMainMenu();
                 System.out.println("Please type the number what you would like to do.");
                 selected = scn.nextInt();
@@ -38,7 +53,7 @@ public class SocialNetwork {
                         showPosts();
                         break;
                     case 2:
-                        user.showReportedPosts();
+                       //user.showReportedPosts();
                         break;
                     case 99:
                         break;
@@ -67,8 +82,8 @@ public class SocialNetwork {
 
     public void showPosts() {
         System.out.println("======= ALL POSTS ========");
-        for (post: listOfPosts) {
-            System.out.printf(" (%d)Likes  [ %s ] : %s ", post.getLikes().size(), post.getUser(), post.getMsg());
+        for (Post post: listOfPosts) {
+            System.out.printf(" (%d)Likes  [ %s ] : %s \n", post.getLikes().size(), post.getUser().getName(), post.getMsg());
         }
     }
 }
