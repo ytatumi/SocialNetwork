@@ -11,6 +11,7 @@ import toxic.common.Reportable;
 import toxic.user.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Post implements Likeable, Reportable {
 
@@ -22,13 +23,15 @@ public class Post implements Likeable, Reportable {
 
     private User user;
     private String msg;
-    private ArrayList<User> likers;
+    private List<User> likers;
     private boolean reported;
+    private List<Report> reports;
 
     public Post(User user, String msg){
         this.user = user;
         this.msg = msg;
         this.likers = new ArrayList<>();
+        reports = new ArrayList<>();
     }
 
     @Override
@@ -48,13 +51,15 @@ public class Post implements Likeable, Reportable {
     @Override
     public void report(User user, String msg) {
         this.reported = true;
+        this.reports.add(new Report(user, msg));
     }
 
-    public ArrayList<User> getLikes(){ return this.likers; }
+    public List<User> getLikes(){ return this.likers; }
     public User getUser(){ return this.user; }
     public String getMsg(){ return this.msg; }
     public boolean getReported(){ return this.reported; }
     public void setReported(){ this.reported = !this.reported; }
+    public List<Report> getReports(){ return this.reports; }
 
     // [reportList (reported, moderated)]
 
