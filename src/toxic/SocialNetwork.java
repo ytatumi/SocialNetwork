@@ -3,7 +3,7 @@ package toxic;
 import toxic.management.PostManagement;
 import toxic.management.UserManagement;
 import toxic.user.AdminUser;
-//import toxic.user.ModUser;
+import toxic.user.ModUser;
 import toxic.user.RegularUser;
 import toxic.user.User;
 
@@ -190,6 +190,18 @@ public class SocialNetwork {
             }
         }
     }
+
+    /*
+    public void showReportedPosts() {
+        System.out.println("======= ALL POSTS ========");
+        for (Post post : listOfPosts) {
+            if (post.reported){
+                System.out.printf(" (%d)Likes  [ %s ] : %s \n", post.getLikes().size(), post.getUser().getName(),
+                        post.getMsg());
+            }
+        }
+    }
+    */
 
 }
 
