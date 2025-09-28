@@ -39,6 +39,9 @@ public class SocialNetwork {
             System.out.println("Please type the number what you would like to do. ");
             selected = Integer.parseInt(scn.nextLine());
             switch (selected) {
+                case 0:
+                    getCurrentUser(scn, listOfUsers);
+                    break;
                 case 1:
                     showPosts();
                     break;
@@ -48,8 +51,18 @@ public class SocialNetwork {
                     Post post = user.createPost(message);
                     listOfPosts.add(post);
                 case 3:
+                    showPosts();
+                    /* System.out.println("Please choose the id for message to report. ");
+                    int id = Integer.parseInt(scn.nextLine()); */
+                    System.out.println("Please copy the message to report. ");
+                    String msgToReport = scn.nextLine().trim();
+                    Post postToReport =searchPost(msgToReport, listOfPosts);
+                    user.reportPost(postToReport);
+                case 4:
                     if (user instanceof ModUser) {
-                        ((ModUser) user).showReportedPosts();
+                        //((ModUser) user).showReportedPosts();
+                        //showReportedPosts();
+                        ((ModUser) user).showReportedPosts(listOfPosts);
                     }
                     if (user instanceof AdminUser) {
                         ((AdminUser) user).showReportedPosts();
@@ -65,7 +78,7 @@ public class SocialNetwork {
         Map<String, String> userInfo = getUserInfo(scn);
         String inputEmail = userInfo.get("email");
         String inputName = userInfo.get("name");
-        User currentUser = searchUser(scn, inputEmail, listOfUsers);
+        User currentUser = searchUser(inputEmail, listOfUsers);
         while (currentUser == null) {
             System.out.println("Please type number of your role. 1) Regular User 2) Moderator 3)Administrator");
             int role = Integer.parseInt(scn.nextLine());
@@ -100,7 +113,7 @@ public class SocialNetwork {
         return userInfo;
     }
 
-    public User searchUser(Scanner scn, String inputEmail, List<User> listOfUsers) {
+    public User searchUser(String inputEmail, List<User> listOfUsers) {
         for (User user : listOfUsers) {
             if (user.getEmail().equals(inputEmail)) {
                 return user;
@@ -108,37 +121,24 @@ public class SocialNetwork {
         }
         return null;
     }
-    /*
-    public User createUser(Scanner scn, String name, String email){
-        User newUser = null;
-        while(newUser==null){
-            System.out.println("Please type number of your role. 1) Regular User 2) Moderator 3)Administrator");
-            int role =Integer.parseInt(scn.nextLine());
-            switch(role){
-                case 1:
-                    newUser = new RegularUser(inputName, inputEmail);
-                    break;
-                /*
-                case 2:
-                    ModUser newUser = new ModUser(inputName,inputEmail);
-                case 3:
-                    AdminUser newUser = new AdminUser(inputName, inputEmail); */
-        /*
-                default:
-                    break;
+
+    public Post searchPost(String inputMsg, List<Post> listOfPosts) {
+        for (Post post : listOfPosts) {
+            if (post.getMsg().equals(inputMsg)) {
+                return post;
             }
-            return newUser;
-
         }
-
-    }  */
+        return null;
+    }
 
     public void displayMainMenu(User user) {
         displayMainMenuHeader();
+        System.out.println("0: Create a User");
         System.out.println("1: View all posts");
         System.out.println("2: Create a post");
+        System.out.println("3: Report a post");
         if (user instanceof AdminUser || user instanceof ModUser) {
-            System.out.println("3: View all reported posts");
+            System.out.println("4: View all reported posts");
         }
         displayMainMenuFooter();
     }
@@ -155,22 +155,22 @@ public class SocialNetwork {
     public void showPosts() {
         System.out.println("======= ALL POSTS ========");
         for (Post post : listOfPosts) {
-            System.out.printf(" (%d)Likes  [ %s ] : %s \n", post.getLikes().size(), post.getUser().getName(), post.getMsg());
+            System.out.printf(" (%d)Likes (%d)Reports [ %s ] : %s \n", post.getLikes().size(), post.getReports().size(),
+                    post.getUser().getName(), post.getMsg());
         }
     }
 
 
-    /*
     public void showReportedPosts() {
         System.out.println("======= ALL POSTS ========");
         for (Post post : listOfPosts) {
-            if (post.reported){
-                System.out.printf(" (%d)Likes  [ %s ] : %s \n", post.getLikes().size(), post.getUser().getName(),
+            if (post.getReported()){
+                System.out.printf(" (%d)Reports  [ %s ] : %s \n", post.getReports().size(), post.getUser().getName(),
                         post.getMsg());
             }
         }
     }
-    */
+
 }
 
 
