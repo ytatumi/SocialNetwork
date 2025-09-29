@@ -62,3 +62,23 @@ public class AdminUser extends User implements Administration, Moderation {
         listOfPosts.remove(post);
     }
 }
+
+    @Override
+    public void showReportedPosts() {
+        int nr = 1;
+        System.out.println("Reported post:");
+        for (Post p : ReportedPosts) {
+            System.out.println("#" + (nr++) + " " + p.getMsg());
+        }
+    }
+
+    @Override
+    public void acceptPost(Post post) {
+        ReportedPosts.remove(post);
+    }
+
+    @Override
+    public void deletePost(Post post) {
+        listOfPosts.remove(post);
+    }
+}
