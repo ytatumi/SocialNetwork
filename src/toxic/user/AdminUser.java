@@ -1,10 +1,12 @@
 package toxic.user;
 
-import toxic.management.UserManagement;
+import toxic.Post;
 
 import java.util.List;
 
-public class AdminUser extends User implements Administration, Moderation {
+public class AdminUser extends User implements Administration, Moderation{
+    List<Post> ReportedPosts;
+    List<Post> listOfPosts;
 
     public AdminUser(String name, String email) {
         super(name, email);
@@ -60,5 +62,14 @@ public class AdminUser extends User implements Administration, Moderation {
     @Override
     public void deletePost(Post post) {
         listOfPosts.remove(post);
+    }
+}
+    @Override
+    public void showReportedPosts() {
+        int nr = 1;
+        System.out.println("Reported post:");
+        for (Post p : ReportedPosts) {
+            System.out.println("#" + (nr++) + " " + p.getMsg());
+        }
     }
 }
