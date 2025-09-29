@@ -1,3 +1,5 @@
+package toxic.user;
+
 import toxic.Post;
 import toxic.SocialNetwork;
 import toxic.user.User;
@@ -36,5 +38,4 @@ public class ModUser extends User {
     public void banUser(User user) {
         user.setBanned(true);
     }
-
 }
