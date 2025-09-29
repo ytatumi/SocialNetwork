@@ -43,4 +43,5 @@ public class ModUser extends User implements Moderation{
     public void banUser(User user) {
         user.setBanned(true);
     }
+
 }
