@@ -7,28 +7,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import org.apache.commons.cli.*;
 
 public class Test {
 
-    public static CommandLine parseArgs(String[] args) throws ParseException {
-
-        Options options = new Options();
-
-        options.addOption("1", true,"option for viewing all posts");
-
-        CommandLineParser parser = new BasicParser();
-
-        return parser.parse(options, args);
-
-    }
-
     SocialNetwork sc = new SocialNetwork();
 
-    public void runTests() throws IOException, ParseException {
+    public void runTests() {
         System.out.println(addTestData());
         System.out.println(checkPost());
     }
+
 
     private boolean addTestData(){
         sc.listOfUsers.add(new RegularUser("namn1", "namn1@someDomain.test"));
@@ -38,7 +26,7 @@ public class Test {
         return sc.listOfUsers.size() == 5;
     }
 
-    private boolean checkPost() throws IOException, ParseException {
+    private boolean checkPost(){
         sc.listOfPosts.add(new Post(sc.listOfUsers.get(1), "testpost1"));
         sc.listOfPosts.add(new Post(sc.listOfUsers.get(2), "testpost2"));
         sc.listOfPosts.add(new Post(sc.listOfUsers.get(3), "testpost3"));
