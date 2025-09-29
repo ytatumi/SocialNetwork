@@ -33,4 +33,8 @@ public class PostManagement {
     public void updatePostList(List<Post> postList) {
         this.postList = postList;
     }
+
+    public void addPost(Post post) {
+        postList.add(post);
+    }
 }
