@@ -16,7 +16,7 @@ public class ModUser extends User implements Moderation{
     }
 
     @Override
-    public void showReportedPosts() {
+    public void showReportedPosts() { //prints all reported posts
         int nr = 1;
         System.out.println("Reported post:");
         for (Post p : ReportedPosts) {
