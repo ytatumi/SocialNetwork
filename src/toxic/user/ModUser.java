@@ -34,14 +34,11 @@ public class ModUser extends User implements Moderation{
         listOfPosts.remove(post);
     }
 
-
     public void deleteUser(User user) {
         listOfUsers.remove(user);
     }
 
-
     public void banUser(User user) {
         user.setBanned(true);
     }
-
 }
