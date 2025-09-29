@@ -1,6 +1,8 @@
 package toxic.user;
 
-import toxic.user.User;
+import toxic.management.UserManagement;
+
+import java.util.List;
 
 public class AdminUser extends User implements Administration {
 
@@ -11,11 +13,28 @@ public class AdminUser extends User implements Administration {
 
     @Override
     public void deleteUser(User user) {
-        //need a list of regular users so it can be found the yrrent user and delete it.
+        List<User> userList = UserManagement.getInstance().getUserList();
+
+        if(user instanceof RegularUser){
+            userList.remove(user);
+            System.out.println("Admin " + this.name + " has deleted " + user.getName());
+        }
+        UserManagement.getInstance().updateUserList(userList);
     }
 
     @Override
     public void banUser(User user) {
-        //
+        List<User> userList = UserManagement.getInstance().getUserList();
+
+        if(user instanceof RegularUser) {
+            for (User u : userList) {
+                if (u.equals(user)) {
+                    u.setBanned(true);
+                    break;
+                }
+            }
+            System.out.println("Admin " + this.name + " has banned " + user.getName());
+        }
+        UserManagement.getInstance().updateUserList(userList);
     }
 }
