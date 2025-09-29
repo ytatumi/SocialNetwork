@@ -34,7 +34,6 @@ public class ModUser extends User implements Moderation{
         listOfPosts.remove(post);
     }
 
-
     public void deleteUser(User user) {
         listOfUsers.remove(user);
     }
@@ -42,5 +41,4 @@ public class ModUser extends User implements Moderation{
     public void banUser(User user) {
         user.setBanned(true);
     }
-
 }
