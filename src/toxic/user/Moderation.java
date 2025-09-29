@@ -1,8 +1,11 @@
 package toxic.user;
 
+import toxic.Post;
+
 public interface Moderation {
 
- void showReportedPosts();
- void acceptPost();
- void deletePost();
+public void showReportedPosts();
+public void acceptPost(Post post);
+public void deletePost(Post post);
+
 }
