@@ -18,6 +18,8 @@ public class AdminUser extends User implements Administration, Moderation {
         if(user instanceof RegularUser){
             userList.remove(user);
             System.out.println("Admin " + this.name + " has deleted " + user.getName());
+        } else {
+            System.out.println("Admin can not be deleted");
         }
         UserManagement.getInstance().updateUserList(userList);
     }
@@ -34,6 +36,8 @@ public class AdminUser extends User implements Administration, Moderation {
                 }
             }
             System.out.println("Admin " + this.name + " has banned " + user.getName());
+        } else {
+            System.out.println("Admin can not be banned");
         }
         UserManagement.getInstance().updateUserList(userList);
 
