@@ -1,8 +1,15 @@
 Classes:
 
-User abstract class
- + name, email, abstract, createPost(), reportPost(), [blockUser(), reportUser()]
-  -> RegularUser implements Reportable
+User abstract class     Done!
+ + name, email,         Done!
+
+
+  createPost(), reportPost(), in progress
+  [blockUser(), reportUser()] undefined
+
+  -> RegularUser                                 Done!
+     implements Reportable                       undefined
+
     -> ModUser implements Moderation
       ->AdminUser implements Administration, Moderation
 
