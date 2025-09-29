@@ -1,33 +1,21 @@
 package toxic;
 
+import toxic.management.PostManagement;
+import toxic.management.UserManagement;
 import toxic.user.AdminUser;
-import toxic.user.ModUser;
+//import toxic.user.ModUser;
 import toxic.user.RegularUser;
 import toxic.user.User;
 
 import java.util.*;
 
 public class SocialNetwork {
-    List<Post> listOfPosts;
-    List<User> listOfUsers;
 
-
-    public SocialNetwork() {
-        this.listOfPosts = new ArrayList<>();
-        this.listOfUsers = new ArrayList<>();
-        init();
-    }
-
-    public void init() {
-        User regularUser1 = new RegularUser("Test User", "test.google.com");
-        listOfUsers.add(regularUser1);
-        Post testPost = new Post(regularUser1, "test message");
-        listOfPosts.add(testPost);
-    }
+    public SocialNetwork() {}
 
     public void run() {
         Scanner scn = new Scanner(System.in);
-        User user = getCurrentUser(scn, listOfUsers);
+        User user = getCurrentUser(scn, UserManagement.getInstance().getUserList());
         selectMenu(scn, user);
         // selectMenu(scn, listOfUsers.get(0));
     }
@@ -40,7 +28,7 @@ public class SocialNetwork {
             selected = Integer.parseInt(scn.nextLine());
             switch (selected) {
                 case 0:
-                    getCurrentUser(scn, listOfUsers);
+                    getCurrentUser(scn, UserManagement.getInstance().getUserList());
                     break;
                 case 1:
                     showPosts();
@@ -49,23 +37,26 @@ public class SocialNetwork {
                     System.out.println("Please type the message. ");
                     String message = scn.nextLine();
                     Post post = user.createPost(message);
-                    listOfPosts.add(post);
+                    PostManagement.getInstance().addPost(post);
                 case 3:
                     showPosts();
                     /* System.out.println("Please choose the id for message to report. ");
                     int id = Integer.parseInt(scn.nextLine()); */
                     System.out.println("Please copy the message to report. ");
                     String msgToReport = scn.nextLine().trim();
-                    Post postToReport =searchPost(msgToReport, listOfPosts);
+                    Post postToReport =searchPost(msgToReport, PostManagement.getInstance().getPostList());
                     user.reportPost(postToReport);
                 case 4:
-                    if (user instanceof ModUser) {
+                    if (user instanceof ModUser || user instanceof AdminUser) {
                         //((ModUser) user).showReportedPosts();
                         //showReportedPosts();
-                        ((ModUser) user).showReportedPosts(listOfPosts);
+                        user.getClass();
+                        user.showReportedPosts(PostManagement.getInstance().getPostList());
                     }
+                    break;
+                case 5:
                     if (user instanceof AdminUser) {
-                        ((AdminUser) user).showReportedPosts();
+                        displayUserManagement(scn, user);
                     }
                     break;
                 case 99:
@@ -139,10 +130,39 @@ public class SocialNetwork {
         System.out.println("3: Report a post");
         if (user instanceof AdminUser || user instanceof ModUser) {
             System.out.println("4: View all reported posts");
+            System.out.println("5: Show all user");
+
         }
         displayMainMenuFooter();
     }
 
+    public void displayUserManagement(Scanner sc, User user) {
+        List<User> list = UserManagement.getInstance().getUserList();
+        for(int i = 1; i <= list.size(); i++) {
+            System.out.println(i + ": " + list.get(i - 1).getName());
+        }
+        System.out.println("Please select user:");
+        String regUsStr = sc.nextLine();
+        int index = (int) Integer.parseInt(regUsStr);
+        User regUser = list.get(index-1);
+
+        System.out.println("""
+                Please select what would you like to do:
+                1: Delete selected user
+                2: Ban selected user""");
+        String choice = sc.nextLine();
+        switch (choice) {
+            case "1":
+                ((AdminUser)user).deleteUser(regUser);
+                break;
+            case "2":
+                ((AdminUser)user).banUser(regUser);
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                break;
+        }
+    }
     public void displayMainMenuHeader() {
         System.out.println("");
         System.out.println("====== MENU  ======");
@@ -154,7 +174,7 @@ public class SocialNetwork {
 
     public void showPosts() {
         System.out.println("======= ALL POSTS ========");
-        for (Post post : listOfPosts) {
+        for (Post post : PostManagement.getInstance().getPostList()) {
             System.out.printf(" (%d)Likes (%d)Reports [ %s ] : %s \n", post.getLikes().size(), post.getReports().size(),
                     post.getUser().getName(), post.getMsg());
         }
@@ -163,7 +183,7 @@ public class SocialNetwork {
 
     public void showReportedPosts() {
         System.out.println("======= ALL POSTS ========");
-        for (Post post : listOfPosts) {
+        for (Post post : PostManagement.getInstance().getPostList()) {
             if (post.getReported()){
                 System.out.printf(" (%d)Reports  [ %s ] : %s \n", post.getReports().size(), post.getUser().getName(),
                         post.getMsg());
