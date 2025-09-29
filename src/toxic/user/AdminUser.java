@@ -1,5 +1,7 @@
 package toxic.user;
 
+import toxic.user.User;
+
 import toxic.Post;
 
 import java.util.List;
