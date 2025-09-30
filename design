@@ -25,9 +25,9 @@ Likeable interface
 Reportable interface
  + report()
 Moderation interface
- + showReportedPosts(), acceptPost(), deletePost()
+ + showReportedPosts(), acceptPost(), deletePost(), banUser()
 Administration interface
- + deleteUser(), banUser()
+ + deleteUser()
 
 OPTIONAL EXPANSION
 
