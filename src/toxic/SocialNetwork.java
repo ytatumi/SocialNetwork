@@ -37,7 +37,7 @@ public class SocialNetwork {
                     System.out.println("Please type the message. ");
                     String message = scn.nextLine();
                     Post post = user.createPost(message);
-                    PostManagement.getInstance().addPost(post);
+                    break;
                 case 3:
                     showPosts();
                     /* System.out.println("Please choose the id for message to report. ");
@@ -50,8 +50,7 @@ public class SocialNetwork {
                     if (user instanceof ModUser || user instanceof AdminUser) {
                         //((ModUser) user).showReportedPosts();
                         //showReportedPosts();
-                        user.getClass();
-                        user.showReportedPosts(PostManagement.getInstance().getPostList());
+                        ((ModUser)user).showReportedPosts();
                     }
                     break;
                 case 5:
@@ -174,35 +173,14 @@ public class SocialNetwork {
 
     public void showPosts() {
         System.out.println("======= ALL POSTS ========");
-        for (Post post : PostManagement.getInstance().getPostList()) {
-            System.out.printf(" (%d)Likes (%d)Reports [ %s ] : %s \n", post.getLikes().size(), post.getReports().size(),
-                    post.getUser().getName(), post.getMsg());
-        }
-    }
-
-
-    public void showReportedPosts() {
-        System.out.println("======= ALL POSTS ========");
-        for (Post post : PostManagement.getInstance().getPostList()) {
-            if (post.getReported()){
-                System.out.printf(" (%d)Reports  [ %s ] : %s \n", post.getReports().size(), post.getUser().getName(),
-                        post.getMsg());
+        List<Post> postList = PostManagement.getInstance().getPostList();
+        if(postList == null){
+            System.out.println("No posts found");
+        } else {
+            for (Post post : postList) {
+                System.out.printf(" (%d)Likes (%d)Reports [ %s ] : %s \n", post.getLikes(), post.getReports().size(),
+                        post.getUser().getName(), post.getMsg());
             }
         }
     }
-
-    /*
-    public void showReportedPosts() {
-        System.out.println("======= ALL POSTS ========");
-        for (Post post : listOfPosts) {
-            if (post.reported){
-                System.out.printf(" (%d)Likes  [ %s ] : %s \n", post.getLikes().size(), post.getUser().getName(),
-                        post.getMsg());
-            }
-        }
-    }
-    */
 }
-
-
-
