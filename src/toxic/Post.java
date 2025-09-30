@@ -26,6 +26,7 @@ public class Post implements Likeable, Reportable {
     private List<User> likers;
     private boolean reported;
     private List<Report> reports;
+    private int currentIndex;
 
     public Post(User user, String msg){
         this.user = user;
@@ -54,13 +55,19 @@ public class Post implements Likeable, Reportable {
         this.reports.add(new Report(user, msg));
     }
 
-    public List<User> getLikes(){ return this.likers; }
+    public int getLikes(){ return this.likers.size(); }
     public User getUser(){ return this.user; }
     public String getMsg(){ return this.msg; }
     public boolean getReported(){ return this.reported; }
     public void setReported(){ this.reported = !this.reported; }
     public List<Report> getReports(){ return this.reports; }
-
+    public void setAccepted(){
+        this.reported = false;
+        this.currentIndex = reports.size();
+    }
+    public List<Report> getNewReports(){
+        return reports.subList(currentIndex, reports.size() - 1);
+    }
     // [reportList (reported, moderated)]
 
     //List<Reported> list = (reported(msg, User), moderated(null eller placeHolder))

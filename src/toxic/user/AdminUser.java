@@ -1,43 +1,27 @@
 package toxic.user;
 
-import toxic.Post;
+import toxic.management.UserManagement;
 
 import java.util.List;
 
-public class AdminUser extends User implements Administration, Moderation{
-    List<Post> ReportedPosts;
-    List<Post> listOfPosts;
+public class AdminUser extends ModUser implements Administration {
 
     public AdminUser(String name, String email) {
         super(name, email);
     }
 
+
     @Override
     public void deleteUser(User user) {
+        List<User> userList = UserManagement.getInstance().getUserList();
 
-    }
-
-    @Override
-    public void banUser(User user) {
-
-    }
-
-    @Override
-    public void showReportedPosts() {
-        int nr = 1;
-        System.out.println("Reported post:");
-        for (Post p : ReportedPosts) {
-            System.out.println("#" + (nr++) + " " + p.getMsg());
+        if(user instanceof RegularUser){
+            userList.remove(user);
+            System.out.println("Admin " + this.name + " has deleted " + user.getName());
+        } else {
+            System.out.println("Admin can not be deleted");
         }
+        UserManagement.getInstance().updateUserList(userList);
     }
 
-    @Override
-    public void acceptPost(Post post) {
-        ReportedPosts.remove(post);
-    }
-
-    @Override
-    public void deletePost(Post post) {
-        listOfPosts.remove(post);
-    }
 }

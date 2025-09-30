@@ -1,6 +1,7 @@
 package toxic.user;
 
 import toxic.Post;
+import toxic.management.PostManagement;
 
 public abstract class User {
  String name;
@@ -13,7 +14,9 @@ public abstract class User {
         banned = false;
     }
     public Post createPost(String msg) {
-        return null;
+        Post newPost = new Post(this, msg);
+        PostManagement.getInstance().addPost(newPost);
+        return newPost;
     }
     public Post reportPost(Post post) {
         return null;

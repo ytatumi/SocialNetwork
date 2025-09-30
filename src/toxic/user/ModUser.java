@@ -1,15 +1,12 @@
 package toxic.user;
 
 import toxic.Post;
-import toxic.SocialNetwork;
-import toxic.user.User;
+import toxic.management.PostManagement;
+import toxic.management.UserManagement;
 
 import java.util.List;
 
 public class ModUser extends User implements Moderation{
-    List<Post> listOfPosts;
-    List<User> listOfUsers;
-    List<Post> ReportedPosts;
 
     public ModUser(String name, String email) {
         super(name, email);
@@ -19,28 +16,47 @@ public class ModUser extends User implements Moderation{
     public void showReportedPosts() { //prints all reported posts
         int nr = 1;
         System.out.println("Reported post:");
-        for (Post p : ReportedPosts) {
-            System.out.println("#" + (nr++) + " " + p.getMsg());
+        List<Post> postList = PostManagement.getInstance().getPostList();
+        for (Post p : postList) {
+            if(p.getReported()){
+                System.out.println("#" + (nr++) + " " + p.getMsg());
+            }
         }
     }
 
     @Override
     public void acceptPost(Post post) {
-        ReportedPosts.remove(post);
+        if(post.getReported()){
+            post.report(post.getUser(), post.getMsg());
+            post.setAccepted();
+        } else {
+            System.out.println("The post is not reported");
+        }
     }
 
     @Override
     public void deletePost(Post post) {
-        listOfPosts.remove(post);
+        List<Post> postList = PostManagement.getInstance().getPostList();
+        postList.remove(post);
+        PostManagement.getInstance().updatePostList(postList);
     }
 
 
-    public void deleteUser(User user) {
-        listOfUsers.remove(user);
-    }
-
-
+    @Override
     public void banUser(User user) {
-        user.setBanned(true);
+        List<User> userList = UserManagement.getInstance().getUserList();
+
+        if(user instanceof RegularUser) {
+            for (User u : userList) {
+                if (u.equals(user)) {
+                    u.setBanned(true);
+                    break;
+                }
+            }
+            System.out.println("Admin " + this.name + " has banned " + user.getName());
+        } else {
+            System.out.println("Admin can not be banned");
+        }
+        UserManagement.getInstance().updateUserList(userList);
     }
 }
