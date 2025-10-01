@@ -2,6 +2,7 @@ package toxic.user;
 
 import toxic.management.UserManagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminUser extends ModUser implements Administration {

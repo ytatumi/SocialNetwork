@@ -17,7 +17,6 @@ public class SocialNetwork {
         Scanner scn = new Scanner(System.in);
         User user = getCurrentUser(scn, UserManagement.getInstance().getUserList());
         selectMenu(scn, user);
-        // selectMenu(scn, listOfUsers.get(0));
     }
 
     public void displayMainMenu(User user) {
