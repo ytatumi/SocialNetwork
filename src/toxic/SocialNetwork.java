@@ -30,11 +30,13 @@ public class SocialNetwork {
         System.out.println("4: Report a post");
         if (user instanceof ModUser) {
             System.out.println("5: View all reported posts");
-            System.out.println("6: Show all user");
-            System.out.println("7: Ban user");
+            System.out.println("6: Delete a reported post"); // Not implemented
+            System.out.println("7: Accept a reported post"); // Not implemented
+            System.out.println("8: Show all user");
+            System.out.println("9: Ban user");
         }
         if (user instanceof AdminUser) {
-            System.out.println("8: Delete User");
+            System.out.println("10: Delete User");
         }
         displayMainMenuFooter();
     }
@@ -47,21 +49,21 @@ public class SocialNetwork {
             System.out.println("Please type the number what you would like to do. ");
             selected = Integer.parseInt(scn.nextLine());
             switch (selected) {
-                case 0:
+                case 0: //0: Create a User
                     currentUser = getCurrentUser(scn, UserManagement.getInstance().getUserList());
                     break;
-                case 1:
+                case 1: //1: View all posts
                     showPosts();
                     break;
-                case 2:
+                case 2: // 2: Create a post
                     System.out.println("Please type the message. ");
                     String message = scn.nextLine();
                     Post post = currentUser.createPost(message);
                     break;
-                case 3:
+                case 3: // 3: Like a post
                     // like
                     break;
-                case 4:
+                case 4: // 4: Report a post
                     showPosts();
                     //System.out.println("Please copy the message to report. ");
                     //String msgToReport = scn.nextLine().trim();
@@ -75,26 +77,28 @@ public class SocialNetwork {
                     }
 
                     break;
-                case 5:
+                case 5:  // View all reported posts
                     if (currentUser instanceof ModUser) {
                         //((ModUser) user).showReportedPosts();
                         //showReportedPosts();
                         ((ModUser) currentUser).showReportedPosts();
                     }
                     break;
-                case 6:
+                case 6: // 6: Delete a reported post
+                case 7: // 7: Accept a reported post
+                case 8: // 8: Show all user
                     if (currentUser instanceof ModUser) {
                         displayAllUsers(scn, currentUser);
                     }
                     break;
-                case 7:
+                case 9: // 9: Ban user
                     if (currentUser instanceof ModUser) {
                         displayAllUsers(scn, currentUser);
                         User regUser = selectUserFromList(scn);
                         ((ModUser) currentUser).banUser(regUser);
                     }
                     break;
-                case 8:
+                case 10: // 10: Delete User
                     if (currentUser instanceof AdminUser) {
                         //displayUserManagement(scn, user);
                         displayAllUsers(scn, currentUser);
