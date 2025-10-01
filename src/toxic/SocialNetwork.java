@@ -24,17 +24,18 @@ public class SocialNetwork {
         System.out.println("0: Create a User");
         System.out.println("1: View all posts");
         System.out.println("2: Create a post");
-        System.out.println("3: Like a post"); //Not implemented
+        System.out.println("3: Like a post");
         System.out.println("4: Report a post");
+        System.out.println("5: Change User");
         if (user instanceof ModUser) {
-            System.out.println("5: View all reported posts");
-            System.out.println("6: Delete a reported post"); // Not implemented
-            System.out.println("7: Accept a reported post"); // Not implemented
-            System.out.println("8: Show all user");
-            System.out.println("9: Ban user");
+            System.out.println("6: View all reported posts");
+            System.out.println("7: Delete a reported post"); // Not implemented
+            System.out.println("8: Accept a reported post"); // Not implemented
+            System.out.println("9: Show all user");
+            System.out.println("10: Ban user");
         }
         if (user instanceof AdminUser) {
-            System.out.println("10: Delete User");
+            System.out.println("11: Delete User");
         }
         displayMainMenuFooter();
     }
@@ -58,8 +59,7 @@ public class SocialNetwork {
                     String message = scn.nextLine();
                     Post post = currentUser.createPost(message);
                     break;
-                case 3: // 3: Like a post
-                    // like
+                case 3: likeOption(PostManagement.getInstance().getPostList(), user, scn);
                     break;
                 case 4: // 4: Report a post
                     showPosts();
@@ -71,33 +71,33 @@ public class SocialNetwork {
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Invalid post number!");
                     }
-
                     break;
-                case 5:  // View all reported posts
+                case 5: user = changeUser(user, UserManagement.getInstance().getUserList(), scn);
+                    break;
+                case 6:  // View all reported posts
                     if (currentUser instanceof ModUser) {
                         ((ModUser) currentUser).showReportedPosts();
                     }
                     break;
-                case 6: // 6: Delete a reported post
-                case 7: // 7: Accept a reported post
-                case 8: // 8: Show all user
+                case 7: // 6: Delete a reported post
+                    break;
+                case 8: // 7: Accept a reported post
+                    break;
+                case 9: // 8: Show all user
                     if (currentUser instanceof ModUser) {
                         displayAllUsers(scn, currentUser);
                     }
                     break;
-                case 9: // 9: Ban user
+                case 10: // 9: Ban user
                     if (currentUser instanceof ModUser) {
                         displayAllUsers(scn, currentUser);
                         User regUser = selectUserFromList(scn);
                         ((ModUser) currentUser).banUser(regUser);
                     }
                     break;
-                case 10: // 10: Delete User
+                case 11: // 10: Delete User
                     if (currentUser instanceof AdminUser) {
-                        //displayUserManagement(scn, user);
-                        displayAllUsers(scn, currentUser);
-                        User regUser = selectUserFromList(scn);
-                        ((AdminUser) currentUser).deleteUser(regUser);
+                        bannedUsersMenu(scn,  (AdminUser) currentUser, UserManagement.getInstance().getUserList(), false);
                         break;
                     }
                     break;
@@ -200,49 +200,53 @@ public class SocialNetwork {
         }
     }
 
-    public void bannedUsersMenu(Scanner scanner, Administration adminUser, List<User> users){
+    public void bannedUsersMenu(Scanner scanner, AdminUser adminUser, List<User> users, boolean isBannedUsers){
         System.out.println("======= BANNED USERS ========");
         System.out.println("""
                 Please select what would you like to do:
-                1: Show Banned Users
-                2: Delete user""");
+                1: Display all Users
+                2: Show Banned Users
+                3: Delete user""");
 
-        switch(scanner.nextInt()){
-            case 1:
-                showBannedUsers(adminUser, users);
-                break;
-            case 2:
-                deleteUser(adminUser, users, scanner);
-                break;
-            default:
-                System.out.println("Invalid choice please try again");
-                bannedUsersMenu(scanner, adminUser, users);
-        }
+            switch(scanner.nextInt()){
+                case 1:
+                    displayAllUsers(scanner, (User) adminUser);
+                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+                    break;
+                case 2:
+                    isBannedUsers = showBannedUsers(adminUser, users);
+                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+                    break;
+                case 3:
+                    deleteUser(adminUser, users, scanner, isBannedUsers);
+                    break;
+                case 0: break;
+                default:
+                    System.out.println("Invalid choice please try again");
+                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+            }
     }
 
-    public void showBannedUsers(Administration adminUser, List<User> users){
+    public boolean showBannedUsers(Administration adminUser, List<User> users){
         adminUser.showBannedUsers(users.stream().filter(User::getBanned).toList());
+        return true;
     }
 
-    public void deleteUser(Administration adminUser, List<User> users, Scanner scanner){
+    public void deleteUser(Administration adminUser, List<User> users, Scanner scanner, boolean banned){
         System.out.println("======= DELETE USER ========");
         System.out.println("""
                 Please select what would you like to do:
                 1: Select user to delete""");
         int tmpDelete = scanner.nextInt();
         System.out.println("To confirm delete enter Yes");
-        if(scanner.next().equals("Yes")){
-            adminUser.deleteUser(users.stream().filter(User::getBanned).toList().get(tmpDelete - 1));
+        scanner.nextLine();
+        if(scanner.nextLine().equals("Yes")){
+            if (banned) {
+                adminUser.deleteUser(users.stream().filter(User::getBanned).toList().get(tmpDelete - 1));
+            } else {
+                adminUser.deleteUser(users.get(tmpDelete - 1));
+            }
         }
-    }
-
-    public void changeUser(User user, List<User> users, Scanner scanner){
-        System.out.println("======= CHANGE USER ========");
-        System.out.println("""
-                Please select what would you like to do:
-                1: Select user to change to""");
-        int tmpChoice = scanner.nextInt();
-        user = users.get(tmpChoice - 1);
     }
 
     public void printUsers(List<User> users){
@@ -255,9 +259,27 @@ public class SocialNetwork {
         }
     }
 
-    // Todo: add option to like post.
-    public void likeOption(List<Post> posts, User user)
+    public void likeOption(List<Post> posts, User user, Scanner scanner)
     {
         showPosts();
+        System.out.println("======= Like Post ========");
+        System.out.println("""
+                Please select what would you like to do:
+                1: Enter the number of the Post""");
+        int tmpLike = scanner.nextInt();
+        posts.get(tmpLike - 1).like(user);
+        scanner.nextLine();
+    }
+
+    public User changeUser(User user, List<User> users, Scanner scanner){
+        printUsers(users);
+        System.out.println(user.getName());
+        System.out.println("======= CHANGE USER ========");
+        System.out.println("""
+                Please select what would you like to do:
+                1: Select user to change to""");
+        int tmpChoice = scanner.nextInt();
+        scanner.nextLine();
+        return users.get(tmpChoice - 1);
     }
 }
