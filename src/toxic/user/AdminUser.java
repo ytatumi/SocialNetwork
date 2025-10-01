@@ -2,6 +2,7 @@ package toxic.user;
 
 import toxic.management.UserManagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminUser extends ModUser implements Administration {
@@ -9,7 +10,6 @@ public class AdminUser extends ModUser implements Administration {
     public AdminUser(String name, String email) {
         super(name, email);
     }
-
 
     @Override
     public void deleteUser(User user) {
@@ -25,17 +25,15 @@ public class AdminUser extends ModUser implements Administration {
     }
 
     @Override
-    public void showBannedUsers(List<User> users){
+    public void showBannedUsers(List<User> bannedUsers){
         System.out.println();
         System.out.println("=====Banned Users=====");
         StringBuilder sb;
-        for(int i = 0; i < users.size(); i++){
+        for(int i = 0; i < bannedUsers.size(); i++){
             sb = new StringBuilder();
-            if(users.get(i).getBanned()){
-                sb.append(i + 1).append(" name: ").append(users.get(i).getName())
-                        .append(" email: ").append(users.get(i).getEmail());
+                sb.append(i + 1).append(" name: ").append(bannedUsers.get(i).getName())
+                        .append(" email: ").append(bannedUsers.get(i).getEmail());
                 System.out.println(sb.toString());
-            }
         }
     }
 
