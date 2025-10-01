@@ -10,34 +10,13 @@ import java.util.stream.Collectors;
 
 public class SocialNetwork {
 
-    public SocialNetwork() {
-    }
+    public SocialNetwork() {}
 
     public void run() {
         Scanner scn = new Scanner(System.in);
         User user = getCurrentUser(scn, UserManagement.getInstance().getUserList());
         selectMenu(scn, user);
-    }
-
-    public void displayMainMenu(User user) {
-        displayMainMenuHeader();
-        System.out.println("0: Create a User");
-        System.out.println("1: View all posts");
-        System.out.println("2: Create a post");
-        System.out.println("3: Like a post");
-        System.out.println("4: Report a post");
-        System.out.println("5: Change User");
-        if (user instanceof ModUser) {
-            System.out.println("6: View all reported posts");
-            System.out.println("7: Delete a reported post"); // Not implemented
-            System.out.println("8: Accept a reported post"); // Not implemented
-            System.out.println("9: Show all user");
-            System.out.println("10: Ban user");
-        }
-        if (user instanceof AdminUser) {
-            System.out.println("11: Delete User");
-        }
-        displayMainMenuFooter();
+        // selectMenu(scn, listOfUsers.get(0));
     }
 
     public void selectMenu(Scanner scn, User user) {
