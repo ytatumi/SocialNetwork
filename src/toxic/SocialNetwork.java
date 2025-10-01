@@ -2,12 +2,11 @@ package toxic;
 
 import toxic.management.PostManagement;
 import toxic.management.UserManagement;
-import toxic.user.AdminUser;
-import toxic.user.ModUser;
-import toxic.user.RegularUser;
-import toxic.user.User;
+import toxic.user.*;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class SocialNetwork {
 
@@ -199,5 +198,66 @@ public class SocialNetwork {
                         postList.get(i - 1).getUser().getName(), postList.get(i - 1).getMsg());
             }
         }
+    }
+
+    public void bannedUsersMenu(Scanner scanner, Administration adminUser, List<User> users){
+        System.out.println("======= BANNED USERS ========");
+        System.out.println("""
+                Please select what would you like to do:
+                1: Show Banned Users
+                2: Delete user""");
+
+        switch(scanner.nextInt()){
+            case 1:
+                showBannedUsers(adminUser, users);
+                break;
+            case 2:
+                deleteUser(adminUser, users, scanner);
+                break;
+            default:
+                System.out.println("Invalid choice please try again");
+                bannedUsersMenu(scanner, adminUser, users);
+        }
+    }
+
+    public void showBannedUsers(Administration adminUser, List<User> users){
+        adminUser.showBannedUsers(users.stream().filter(User::getBanned).toList());
+    }
+
+    public void deleteUser(Administration adminUser, List<User> users, Scanner scanner){
+        System.out.println("======= DELETE USER ========");
+        System.out.println("""
+                Please select what would you like to do:
+                1: Select user to delete""");
+        int tmpDelete = scanner.nextInt();
+        System.out.println("To confirm delete enter Yes");
+        if(scanner.next().equals("Yes")){
+            adminUser.deleteUser(users.stream().filter(User::getBanned).toList().get(tmpDelete - 1));
+        }
+    }
+
+    public void changeUser(User user, List<User> users, Scanner scanner){
+        System.out.println("======= CHANGE USER ========");
+        System.out.println("""
+                Please select what would you like to do:
+                1: Select user to change to""");
+        int tmpChoice = scanner.nextInt();
+        user = users.get(tmpChoice - 1);
+    }
+
+    public void printUsers(List<User> users){
+        StringBuilder sb;
+        for (int i = 0; i < users.size(); i++) {
+               sb = new StringBuilder();
+                    sb.append(i + 1).append(" name: ").append(users.get(i).getName())
+                    .append(" email: ").append(users.get(i).getEmail());
+            System.out.println(sb.toString());
+        }
+    }
+
+    // Todo: add option to like post.
+    public void likeOption(List<Post> posts, User user)
+    {
+        showPosts();
     }
 }
