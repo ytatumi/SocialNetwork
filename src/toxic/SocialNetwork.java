@@ -24,7 +24,7 @@ public class SocialNetwork {
         System.out.println("0: Create a User");
         System.out.println("1: View all posts");
         System.out.println("2: Create a post");
-        System.out.println("3: Like a post");
+        System.out.println("3: Like/Unlike a post");
         System.out.println("4: Report a post");
         System.out.println("5: Change User");
         if (user instanceof ModUser) {
@@ -59,6 +59,7 @@ public class SocialNetwork {
                     String message = scn.nextLine();
                     Post post = currentUser.createPost(message);
                     break;
+         
                 case 3:
                     likeOption(PostManagement.getInstance().getPostList(), user, scn);
                     break;
@@ -300,15 +301,23 @@ public class SocialNetwork {
         }
     }
 
-    public void likeOption(List<Post> posts, User user, Scanner scanner) {
+
+    public void likeUnlikeOption(List<Post> posts, User user, Scanner scanner)
+    {
         showPosts();
         System.out.println("======= Like Post ========");
         System.out.println("""
-                Please select what would you like to do:
-                1: Enter the number of the Post""");
+                Please enter the index of the post to
+                like/unlike""");
         int tmpLike = scanner.nextInt();
-        posts.get(tmpLike - 1).like(user);
+        if(!posts.get(tmpLike - 1).getLikedByUser(user)){
+            posts.get(tmpLike - 1).like(user);
+        }
+        else{
+            posts.get(tmpLike - 1).unLike(user);
+        }
         scanner.nextLine();
+        showPosts();
     }
 
     public User changeUser(User user, List<User> users, Scanner scanner) {

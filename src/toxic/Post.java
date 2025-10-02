@@ -49,6 +49,10 @@ public class Post implements Likeable, Reportable {
         }
     }
 
+    public boolean getLikedByUser(User user){
+        return likers.contains(user);
+    }
+
     @Override
     public void report(User user, String msg) {
         this.reported = true;
