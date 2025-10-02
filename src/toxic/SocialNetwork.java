@@ -61,7 +61,7 @@ public class SocialNetwork {
                     break;
          
                 case 3:
-                    likeOption(PostManagement.getInstance().getPostList(), user, scn);
+                    likeUnlikeOption(PostManagement.getInstance().getPostList(), user, scn);
                     break;
                 case 4: // 4: Report a post
                     showPosts();
