@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 public class SocialNetwork {
 
-    public SocialNetwork() {}
+    public SocialNetwork() {
+    }
 
     public void run() {
         Scanner scn = new Scanner(System.in);
@@ -190,11 +191,12 @@ public class SocialNetwork {
             switch(scanner.nextInt()){
                 case 1:
                     displayAllUsers(scanner, (User) adminUser);
-                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+                    bannedUsersMenu(scanner, adminUser, users, false);
                     break;
                 case 2:
-                    isBannedUsers = showBannedUsers(adminUser, users);
-                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+                    showBannedUsers(adminUser, users);
+
+                    bannedUsersMenu(scanner, adminUser, users, true);
                     break;
                 case 3:
                     deleteUser(adminUser, users, scanner, isBannedUsers);
@@ -206,9 +208,8 @@ public class SocialNetwork {
             }
     }
 
-    public boolean showBannedUsers(Administration adminUser, List<User> users){
+    public void showBannedUsers(Administration adminUser, List<User> users){
         adminUser.showBannedUsers(users.stream().filter(User::getBanned).toList());
-        return true;
     }
 
     public void deleteUser(Administration adminUser, List<User> users, Scanner scanner, boolean banned){
