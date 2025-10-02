@@ -63,11 +63,13 @@ public class SocialNetwork {
                     break;
                 case 4: // 4: Report a post
                     showPosts();
-                    System.out.println("Please type the number of the message to report. ");
+                    System.out.println("Please type the number of the post to report. ");
                     int msgToReport = Integer.parseInt(scn.nextLine());
+                    System.out.println("Please type the comments for report. ");
+                    String comment = scn.nextLine();
                     try {
                         Post postToReport = PostManagement.getInstance().getPostList().get(msgToReport - 1);
-                        currentUser.reportPost(postToReport);
+                        currentUser.reportPost(postToReport, comment);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Invalid post number!");
                     }
