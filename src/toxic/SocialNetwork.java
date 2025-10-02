@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 public class SocialNetwork {
 
-    public SocialNetwork() {}
+    public SocialNetwork() {
+    }
 
     public void run() {
         Scanner scn = new Scanner(System.in);
@@ -114,6 +115,9 @@ public class SocialNetwork {
         String inputEmail = userInfo.get("email");
         String inputName = userInfo.get("name");
         User currentUser = searchUser(inputEmail, listOfUsers);
+        if (currentUser != null) {
+            System.out.printf("User is already registered as role: %s \n", currentUser.getClass().getSimpleName());
+        }
         while (currentUser == null) {
             System.out.println("Please type number of your role. 1) Regular User 2) Moderator 3)Administrator");
             int role = Integer.parseInt(scn.nextLine());
@@ -207,11 +211,12 @@ public class SocialNetwork {
             switch(scanner.nextInt()){
                 case 1:
                     displayAllUsers(scanner, (User) adminUser);
-                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+                    bannedUsersMenu(scanner, adminUser, users, false);
                     break;
                 case 2:
-                    isBannedUsers = showBannedUsers(adminUser, users);
-                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+                    showBannedUsers(adminUser, users);
+
+                    bannedUsersMenu(scanner, adminUser, users, true);
                     break;
                 case 3:
                     deleteUser(adminUser, users, scanner, isBannedUsers);
@@ -223,9 +228,8 @@ public class SocialNetwork {
             }
     }
 
-    public boolean showBannedUsers(Administration adminUser, List<User> users){
+    public void showBannedUsers(Administration adminUser, List<User> users){
         adminUser.showBannedUsers(users.stream().filter(User::getBanned).toList());
-        return true;
     }
 
     public void deleteUser(Administration adminUser, List<User> users, Scanner scanner, boolean banned){
