@@ -59,7 +59,8 @@ public class SocialNetwork {
                     String message = scn.nextLine();
                     Post post = currentUser.createPost(message);
                     break;
-                case 3: likeOption(PostManagement.getInstance().getPostList(), user, scn);
+                case 3:
+                    likeOption(PostManagement.getInstance().getPostList(), user, scn);
                     break;
                 case 4: // 4: Report a post
                     showPosts();
@@ -74,7 +75,8 @@ public class SocialNetwork {
                         System.out.println("Invalid post number!");
                     }
                     break;
-                case 5: user = changeUser(user, UserManagement.getInstance().getUserList(), scn);
+                case 5:
+                    user = changeUser(user, UserManagement.getInstance().getUserList(), scn);
                     break;
                 case 6:  // View all reported posts
                     if (currentUser instanceof ModUser) {
@@ -82,8 +84,44 @@ public class SocialNetwork {
                     }
                     break;
                 case 7: // 6: Delete a reported post
+                    if (currentUser instanceof ModUser) {
+                        List<Post> reportedPostList = ((ModUser) currentUser).getReportedPostList();
+                        if (reportedPostList.isEmpty()) {
+                            System.out.println("No reported posts found!");
+                        } else {
+                            ((ModUser) currentUser).showReportedPosts();
+                            System.out.println("Please type the number of the reported post to delete");
+                            try {
+                                int postId = Integer.parseInt(scn.nextLine());
+                                Post deletedPost = reportedPostList.get(postId - 1);
+                                ((ModUser) currentUser).deletePost(deletedPost);
+                            } catch (IndexOutOfBoundsException e) {
+                                System.out.println("Invalid post number!");
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid format for post number");
+                            }
+                        }
+                    }
                     break;
                 case 8: // 7: Accept a reported post
+                    if (currentUser instanceof ModUser) {
+                        List<Post> reportedPostList = ((ModUser) currentUser).getReportedPostList();
+                        if (reportedPostList.isEmpty()) {
+                            System.out.println("No reported posts found!");
+                        } else {
+                            ((ModUser) currentUser).showReportedPosts();
+                            System.out.println("Please type the number of the reported post to accept");
+                            try {
+                                int postId = Integer.parseInt(scn.nextLine());
+                                Post acceptedPost = reportedPostList.get(postId - 1);
+                                ((ModUser) currentUser).acceptPost(acceptedPost);
+                            } catch (IndexOutOfBoundsException e) {
+                                System.out.println("Invalid post number!");
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid format for post number");
+                            }
+                        }
+                    }
                     break;
                 case 9: // 8: Show all user
                     if (currentUser instanceof ModUser) {
@@ -99,7 +137,7 @@ public class SocialNetwork {
                     break;
                 case 11: // 10: Delete User
                     if (currentUser instanceof AdminUser) {
-                        bannedUsersMenu(scn,  (AdminUser) currentUser, UserManagement.getInstance().getUserList(), false);
+                        bannedUsersMenu(scn, (AdminUser) currentUser, UserManagement.getInstance().getUserList(), false);
                         break;
                     }
                     break;
@@ -202,7 +240,7 @@ public class SocialNetwork {
         }
     }
 
-    public void bannedUsersMenu(Scanner scanner, AdminUser adminUser, List<User> users, boolean isBannedUsers){
+    public void bannedUsersMenu(Scanner scanner, AdminUser adminUser, List<User> users, boolean isBannedUsers) {
         System.out.println("======= BANNED USERS ========");
         System.out.println("""
                 Please select what would you like to do:
@@ -210,31 +248,32 @@ public class SocialNetwork {
                 2: Show Banned Users
                 3: Delete user""");
 
-            switch(scanner.nextInt()){
-                case 1:
-                    displayAllUsers(scanner, (User) adminUser);
-                    bannedUsersMenu(scanner, adminUser, users, false);
-                    break;
-                case 2:
-                    showBannedUsers(adminUser, users);
+        switch (scanner.nextInt()) {
+            case 1:
+                displayAllUsers(scanner, (User) adminUser);
+                bannedUsersMenu(scanner, adminUser, users, false);
+                break;
+            case 2:
+                showBannedUsers(adminUser, users);
 
-                    bannedUsersMenu(scanner, adminUser, users, true);
-                    break;
-                case 3:
-                    deleteUser(adminUser, users, scanner, isBannedUsers);
-                    break;
-                case 0: break;
-                default:
-                    System.out.println("Invalid choice please try again");
-                    bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
-            }
+                bannedUsersMenu(scanner, adminUser, users, true);
+                break;
+            case 3:
+                deleteUser(adminUser, users, scanner, isBannedUsers);
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Invalid choice please try again");
+                bannedUsersMenu(scanner, adminUser, users, isBannedUsers);
+        }
     }
 
-    public void showBannedUsers(Administration adminUser, List<User> users){
+    public void showBannedUsers(Administration adminUser, List<User> users) {
         adminUser.showBannedUsers(users.stream().filter(User::getBanned).toList());
     }
 
-    public void deleteUser(Administration adminUser, List<User> users, Scanner scanner, boolean banned){
+    public void deleteUser(Administration adminUser, List<User> users, Scanner scanner, boolean banned) {
         System.out.println("======= DELETE USER ========");
         System.out.println("""
                 Please select what would you like to do:
@@ -242,7 +281,7 @@ public class SocialNetwork {
         int tmpDelete = scanner.nextInt();
         System.out.println("To confirm delete enter Yes");
         scanner.nextLine();
-        if(scanner.nextLine().equals("Yes")){
+        if (scanner.nextLine().equals("Yes")) {
             if (banned) {
                 adminUser.deleteUser(users.stream().filter(User::getBanned).toList().get(tmpDelete - 1));
             } else {
@@ -251,18 +290,17 @@ public class SocialNetwork {
         }
     }
 
-    public void printUsers(List<User> users){
+    public void printUsers(List<User> users) {
         StringBuilder sb;
         for (int i = 0; i < users.size(); i++) {
-               sb = new StringBuilder();
-                    sb.append(i + 1).append(" name: ").append(users.get(i).getName())
+            sb = new StringBuilder();
+            sb.append(i + 1).append(" name: ").append(users.get(i).getName())
                     .append(" email: ").append(users.get(i).getEmail());
             System.out.println(sb.toString());
         }
     }
 
-    public void likeOption(List<Post> posts, User user, Scanner scanner)
-    {
+    public void likeOption(List<Post> posts, User user, Scanner scanner) {
         showPosts();
         System.out.println("======= Like Post ========");
         System.out.println("""
@@ -273,7 +311,7 @@ public class SocialNetwork {
         scanner.nextLine();
     }
 
-    public User changeUser(User user, List<User> users, Scanner scanner){
+    public User changeUser(User user, List<User> users, Scanner scanner) {
         printUsers(users);
         System.out.println(user.getName());
         System.out.println("======= CHANGE USER ========");
