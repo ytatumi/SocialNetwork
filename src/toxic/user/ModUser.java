@@ -27,7 +27,7 @@ public class ModUser extends User implements Moderation{
     @Override
     public void acceptPost(Post post) {
         if(post.getReported()){
-            post.report(post.getUser(), post.getMsg());
+            post.report(post.getUser());
             post.setAccepted();
         } else {
             System.out.println("The post is not reported");

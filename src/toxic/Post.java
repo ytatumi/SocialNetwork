@@ -50,9 +50,9 @@ public class Post implements Likeable, Reportable {
     }
 
     @Override
-    public void report(User user, String msg) {
+    public void report(User user) {
         this.reported = true;
-        this.reports.add(new Report(user, msg));
+        this.reports.add(new Report<Post>(user, this));
     }
 
     public int getLikes(){ return this.likers.size(); }

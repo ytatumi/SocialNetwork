@@ -229,7 +229,7 @@ public class SocialNetwork {
     }
 
     public void showBannedUsers(Administration adminUser, List<User> users){
-        adminUser.showBannedUsers(users.stream().filter(User::getBanned).toList());
+        adminUser.showBannedUsers(users.stream().filter(User::getBanned).collect(Collectors.toList()));
     }
 
     public void deleteUser(Administration adminUser, List<User> users, Scanner scanner, boolean banned){
@@ -242,7 +242,7 @@ public class SocialNetwork {
         scanner.nextLine();
         if(scanner.nextLine().equals("Yes")){
             if (banned) {
-                adminUser.deleteUser(users.stream().filter(User::getBanned).toList().get(tmpDelete - 1));
+                adminUser.deleteUser(users.stream().filter(User::getBanned).collect(Collectors.toList()).get(tmpDelete - 1));
             } else {
                 adminUser.deleteUser(users.get(tmpDelete - 1));
             }
