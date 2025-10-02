@@ -18,8 +18,8 @@ public abstract class User {
         PostManagement.getInstance().addPost(newPost);
         return newPost;
     }
-    public Post reportPost(Post post) {
-        return null;
+    public void reportPost(Post post, String msg) {
+        post.report(this, msg);
     }
 
     public String getName() {

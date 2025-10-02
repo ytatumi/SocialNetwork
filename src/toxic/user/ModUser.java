@@ -24,6 +24,10 @@ public class ModUser extends User implements Moderation{
         }
     }
 
+    public List<Post> getReportedPostList() {
+        return PostManagement.getInstance().getPostList().stream().filter(Post::getReported).toList();
+    }
+
     @Override
     public void acceptPost(Post post) {
         if(post.getReported()){
