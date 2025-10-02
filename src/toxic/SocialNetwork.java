@@ -26,7 +26,7 @@ public class SocialNetwork {
         System.out.println("2: Create a post");
         System.out.println("3: Like/Unlike a post");
         System.out.println("4: Report a post");
-        System.out.println("5: Change User");
+        System.out.println("5: Switch User");
         if (user instanceof ModUser) {
             System.out.println("6: View all reported posts");
             System.out.println("7: Delete a reported post"); // Not implemented
@@ -320,15 +320,37 @@ public class SocialNetwork {
         showPosts();
     }
 
-    public User changeUser(User user, List<User> users, Scanner scanner) {
-        printUsers(users);
-        System.out.println(user.getName());
+    public User changeUser(User currentUser, List<User> users, Scanner scanner){
+        System.out.println("");
         System.out.println("======= CHANGE USER ========");
-        System.out.println("""
-                Please select what would you like to do:
-                1: Select user to change to""");
-        int tmpChoice = scanner.nextInt();
-        scanner.nextLine();
-        return users.get(tmpChoice - 1);
+        System.out.println("Enter your email to login");
+        String tmpChoice = scanner.nextLine();
+        User user = searchUser(tmpChoice, users);
+        if (user == null){
+            System.out.println("Invalid user credentials");
+            System.out.println("Would you like to remain as" + currentUser.getName() + " or try again?");
+            System.out.println("1. Remain as " + currentUser.getName());
+            System.out.println("2. Switch user");
+            int selected = -1;
+            selected = Integer.parseInt(scanner.nextLine());
+            switch (selected){
+                case 1:
+                    user = currentUser;
+                    break;
+                case 2:
+                default: changeUser(currentUser, users, scanner);
+            }
+        }
+        String role;
+        if (user instanceof AdminUser){
+            role = "Administrator";
+        } else if (user instanceof ModUser){
+            role = "Moderator";
+        } else {
+            role = "Regular User";
+        }
+        System.out.println("");
+        System.out.println("User " + user.getName() + " is logged in as " + role);
+        return user;
     }
 }
