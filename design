@@ -29,6 +29,17 @@ Moderation interface
 Administration interface
  + deleteUser()
 
+SUGGESTED ADDED / MODIFIED FUNCTIONALITY
+
+CLI
+3: (RegularUser) Like a post >> Modify functionality to offer option to like/unlike a post [Joakim]
+5: Change User >> Modify to implement user credentials (email) [Begaiym]
+6: (ModUser) Delete a reported post [Yuka]
+7: (ModUser) Accept a reported post [Yuka]
+
+New option: (ModUser) Report a user [Anthony]
+New option: (ModUser) Accept a reported user [Anthony]
+
 OPTIONAL EXPANSION
 
 Classes:
