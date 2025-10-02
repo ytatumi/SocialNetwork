@@ -49,7 +49,7 @@ public class SocialNetwork {
             selected = Integer.parseInt(scn.nextLine());
             switch (selected) {
                 case 0: //0: Create a User
-                    currentUser = getCurrentUser(scn, UserManagement.getInstance().getUserList());
+                    createNewUser(scn, UserManagement.getInstance().getUserList());
                     break;
                 case 1: //1: View all posts
                     showPosts();
@@ -60,8 +60,8 @@ public class SocialNetwork {
                     Post post = currentUser.createPost(message);
                     break;
          
-                case 3:
-                    likeUnlikeOption(PostManagement.getInstance().getPostList(), user, scn);
+                case 3: // Like or Unlike a Post
+                    likeUnlikeOption(PostManagement.getInstance().getPostList(), currentUser, scn);
                     break;
                 case 4: // 4: Report a post
                     showPosts();
@@ -76,8 +76,8 @@ public class SocialNetwork {
                         System.out.println("Invalid post number!");
                     }
                     break;
-                case 5:
-                    user = changeUser(user, UserManagement.getInstance().getUserList(), scn);
+                case 5: // Change User
+                    currentUser = changeUser(currentUser, UserManagement.getInstance().getUserList(), scn);
                     break;
                 case 6:  // View all reported posts
                     if (currentUser instanceof ModUser) {
@@ -151,6 +151,57 @@ public class SocialNetwork {
         }
     }
 
+    public void createNewUser(Scanner scn, List<User> listOfUsers) {
+        Map<String, String> userInfo = getNewUserInfo(scn);
+        String inputEmail = userInfo.get("email");
+        String inputName = userInfo.get("name");
+        User tmpUser = searchUser(inputEmail, listOfUsers);
+        if (tmpUser != null) {
+            System.out.println("That user email is already registered.");
+            System.out.println("Would you like to try again?");
+            System.out.println("1. Yes - Create new user");
+            System.out.println("2. No - Return to main menu");
+
+            int selected = -1;
+            selected = Integer.parseInt(scn.nextLine());
+
+            switch (selected){
+                case 1:
+                    createNewUser(scn, listOfUsers);
+                    break;
+                case 2:
+                default:
+                    return;
+            }
+        }
+        while (tmpUser == null) {
+            System.out.println("""
+                   Please select the role for the new user:
+                   1) Regular User 2) Moderator 3) Administrator""");
+            int role = Integer.parseInt(scn.nextLine());
+            switch (role) {
+                case 1:
+                    tmpUser = new RegularUser(inputName, inputEmail);
+                    listOfUsers.add(tmpUser);
+                    break;
+                case 2:
+                    tmpUser = new ModUser(inputName, inputEmail);
+                    listOfUsers.add(tmpUser);
+                    break;
+                case 3:
+                    tmpUser = new AdminUser(inputName, inputEmail);
+                    listOfUsers.add(tmpUser);
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
+            }
+        }
+        System.out.println("New user created:");
+        System.out.println("Name: " + inputName);
+        System.out.println("Email: " + inputEmail);
+    }
+
     public User getCurrentUser(Scanner scn, List<User> listOfUsers) {
         Map<String, String> userInfo = getUserInfo(scn);
         String inputEmail = userInfo.get("email");
@@ -188,6 +239,18 @@ public class SocialNetwork {
         System.out.println("Please type your name: ");
         String inputName = scn.nextLine().trim();
         System.out.println("Please type your email address :");
+        String inputEmail = scn.nextLine().trim();
+        userInfo.put("name", inputName);
+        userInfo.put("email", inputEmail);
+        return userInfo;
+    }
+
+    public Map<String, String> getNewUserInfo(Scanner scn) {
+        HashMap<String, String> userInfo = new HashMap<>();
+        System.out.println("Provide the credentials of the new user");
+        System.out.println("Name: ");
+        String inputName = scn.nextLine().trim();
+        System.out.println("Email: ");
         String inputEmail = scn.nextLine().trim();
         userInfo.put("name", inputName);
         userInfo.put("email", inputEmail);
@@ -235,7 +298,7 @@ public class SocialNetwork {
             System.out.println("No posts found");
         } else {
             for (int i = 1; i <= postList.size(); i++) {
-                System.out.printf("%d :  (%d)Likes (%d)Reports [ %s ] : %s \n", i, postList.get(i - 1).getLikes(), postList.get(i - 1).getReports().size(),
+                System.out.printf("%d :  (%d)Likes (%d)Reports [ %s ] : %s \n", i, postList.get(i - 1).getLikes(), postList.get(i - 1).getNewReports().size(),
                         postList.get(i - 1).getUser().getName(), postList.get(i - 1).getMsg());
             }
         }
@@ -328,7 +391,7 @@ public class SocialNetwork {
         User user = searchUser(tmpChoice, users);
         if (user == null){
             System.out.println("Invalid user credentials");
-            System.out.println("Would you like to remain as" + currentUser.getName() + " or try again?");
+            System.out.println("Would you like to remain as " + currentUser.getName() + " or try again?");
             System.out.println("1. Remain as " + currentUser.getName());
             System.out.println("2. Switch user");
             int selected = -1;

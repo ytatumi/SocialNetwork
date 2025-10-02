@@ -70,7 +70,7 @@ public class Post implements Likeable, Reportable {
         this.currentIndex = reports.size();
     }
     public List<Report> getNewReports(){
-        return reports.subList(currentIndex, reports.size() - 1);
+        return reports.subList(currentIndex, reports.size());
     }
     // [reportList (reported, moderated)]
 
