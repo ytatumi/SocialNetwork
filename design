@@ -32,13 +32,20 @@ Administration interface
 SUGGESTED ADDED / MODIFIED FUNCTIONALITY
 
 CLI
+0: Create New User >> without setting new user as the new currentUser [Niklas]
 3: (RegularUser) Like a post >> Modify functionality to offer option to like/unlike a post [Joakim]
 5: Change User >> Modify to implement user credentials (email) [Begaiym]
 6: (ModUser) Delete a reported post [Yuka]
 7: (ModUser) Accept a reported post [Yuka]
 
+BUG Review and modify use of recursion for SocialNetwork changeUser and createNewUser
+
 New option: (ModUser) Report a user [Anthony]
 New option: (ModUser) Accept a reported user [Anthony]
+
+REFACTOR: SocialNetwork and specifically the selection menu
+ - Cleaner method for displaying the menu (and sub menus)
+ - Organizing individual Menu actions into separate classes
 
 OPTIONAL EXPANSION
 
