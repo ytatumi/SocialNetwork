@@ -1,6 +1,7 @@
 package toxic.management;
 
 import toxic.user.AdminUser;
+import toxic.user.ModUser;
 import toxic.user.RegularUser;
 import toxic.user.User;
 
@@ -17,9 +18,11 @@ public class UserManagement {
     }
 
     private void generateDefaultUser() {
-        User regularUser1 = new RegularUser("Test User", "test.google.com");
-        User adminUser = new AdminUser("Admin", "admin.google.com");
-        this.userList.add(regularUser1);
+        User regularUser = new RegularUser("Regular User", "regular@toxic.com");
+        User modUser = new ModUser("Mod User", "moderator@toxic.com");
+        User adminUser = new AdminUser("Admin User", "admin@toxic.com");
+        this.userList.add(regularUser);
+        this.userList.add(modUser);
         this.userList.add(adminUser);
     }
 
