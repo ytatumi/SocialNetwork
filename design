@@ -40,6 +40,16 @@ CLI
 
 BUG Review and modify use of recursion for SocialNetwork changeUser and createNewUser
 
+BUG Input handlers (int, String, emails, etc)
+    Suggestion for int
+    if(tmp.matches("[0-9]+")){
+        break;
+    }
+
+Provide exit options in the sub menues
+
+NEW option: Delete a post regardless of it it has been reported
+
 New option: (ModUser) Report a user [Anthony]
 New option: (ModUser) Accept a reported user [Anthony]
 

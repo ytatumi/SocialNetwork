@@ -156,7 +156,8 @@ public class SocialNetwork {
         String inputEmail = userInfo.get("email");
         String inputName = userInfo.get("name");
         User tmpUser = searchUser(inputEmail, listOfUsers);
-        if (tmpUser != null) {
+
+        while (tmpUser != null) {
             System.out.println("That user email is already registered.");
             System.out.println("Would you like to try again?");
             System.out.println("1. Yes - Create new user");
@@ -167,13 +168,17 @@ public class SocialNetwork {
 
             switch (selected){
                 case 1:
-                    createNewUser(scn, listOfUsers);
+                    userInfo = getNewUserInfo(scn);
+                    inputEmail = userInfo.get("email");
+                    inputName = userInfo.get("name");
+                    tmpUser = searchUser(inputEmail, listOfUsers);
                     break;
                 case 2:
                 default:
                     return;
             }
         }
+
         while (tmpUser == null) {
             System.out.println("""
                    Please select the role for the new user:
@@ -389,7 +394,8 @@ public class SocialNetwork {
         System.out.println("Enter your email to login");
         String tmpChoice = scanner.nextLine();
         User user = searchUser(tmpChoice, users);
-        if (user == null){
+
+        while (user == null){
             System.out.println("Invalid user credentials");
             System.out.println("Would you like to remain as " + currentUser.getName() + " or try again?");
             System.out.println("1. Remain as " + currentUser.getName());
@@ -401,9 +407,15 @@ public class SocialNetwork {
                     user = currentUser;
                     break;
                 case 2:
-                default: changeUser(currentUser, users, scanner);
+                    System.out.println("Enter your email to login");
+                    tmpChoice = scanner.nextLine();
+                    user = searchUser(tmpChoice, users);
+                    break;
+                default:
+                    break;
             }
         }
+
         String role;
         if (user instanceof AdminUser){
             role = "Administrator";
